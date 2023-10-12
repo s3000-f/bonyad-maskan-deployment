@@ -1,0 +1,82 @@
+version: "3.8"
+services:
+  backend:
+    build: ./code/backend
+    container_name: backend
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 3001:3001
+    volumes:
+      - ./uploads:/uploads
+    networks:
+      - backend
+
+    build: ./code/maz-admin-panel
+    container_name: admin-panel
+    restart: always
+    depends_on:
+      - core
+      - auth
+      - user
+      - shop
+      - book
+      - sms
+      - storage
+    ports:
+      - 5000:5000
+    networks:
+      - frontend
+  frontend:
+    build: ./code/frontend
+    container_name: frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 8080:8080
+    networks:
+      - frontend
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nest-nginx
+    restart: always
+    depends_on:
+      - backend
+      - frontend
+    environment:
+      - NGINX_SERVER_NAME=soroushfathi.com
+      - BACKEND_HOST=backend
+      - FRONTEND_HOST=frontend
+      - BACKEND_PORT=3001
+      - FRONTEND_PORT=8080
+      - NGINX_MAX_BODY=500M
+    ports:
+      - 80:80
+    volumes:
+      - ./local_files:/app/files
+    networks:
+      - backend
+      - frontend
+
+  postgres:
+    image: postgres:13
+    container_name: bonyad-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: bonyadPostgres
+      POSTGRES_PASSWORD: kLyx0FtpaoB4zoyhOBcM
+      POSTGRES_DB: bonyad
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  backend:
+  frontend:
