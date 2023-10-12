@@ -8,7 +8,8 @@ setup:
 setupUpdate:
 	cd code/frontend
 	git pull
-	cd ../backend
+	cd ../
+	cd backend
 	git pull
 	cd ../../
 run:
