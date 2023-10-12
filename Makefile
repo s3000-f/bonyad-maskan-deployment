@@ -8,6 +8,10 @@ setup:
 setupUpdate:
 	cd code/frontend && git pull
 	cd code/backend && git pull
+updateFront:
+	docker-compose up -d --no-deps --build frontend
+updateBack:
+	docker-compose up -d --no-deps --build backend
 run:
 	docker-compose up -d
 
