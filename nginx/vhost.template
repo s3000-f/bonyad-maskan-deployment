@@ -1,8 +1,5 @@
 server {
 	listen 80;
-    listen 443 ssl;
-	ssl_certificate    /app/private/ssl/cert.pem;
-	ssl_certificate_key    /app/private/ssl/key.pem;
 	server_name ${NGINX_SERVER_NAME};
 	root /app/public;
 	client_max_body_size ${NGINX_MAX_BODY};
