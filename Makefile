@@ -6,12 +6,8 @@ setup:
 	cp env/backend/.env code/backend/.env	
 	
 setupUpdate:
-	cd code/frontend
-	git pull
-	cd ../
-	cd backend
-	git pull
-	cd ../../
+	cd code/frontend && git pull
+	cd code/backend && git pull
 run:
 	docker-compose up -d
 
