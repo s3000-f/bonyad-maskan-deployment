@@ -61,7 +61,15 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
     networks:
       - backend
-
+  
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    restart: always
+    command: redis-server --requirepass nm2CmRIpbCtFZToRD6Ks
+    networks:
+      - backend
 networks:
   backend:
   frontend:
