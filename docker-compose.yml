@@ -1,8 +1,21 @@
 version: "3.8"
 services:
-  backend:
-    build: ./code/backend
-    container_name: backend
+  main:
+    build: ./code/main
+    container_name: main
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 3003:3003
+    volumes:
+      - ./uploads:/uploads
+    networks:
+      - backend
+
+  survey:
+    build: ./code/survey
+    container_name: survey
     restart: always
     depends_on:
       - postgres
@@ -10,6 +23,28 @@ services:
       - 3001:3001
     volumes:
       - ./uploads:/uploads
+    networks:
+      - backend
+
+  core:
+    build: ./code/core
+    container_name: core
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 3004:3004
+    networks:
+      - backend
+  
+  auth:
+    build: ./code/auth
+    container_name: auth
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 3002:3002
     networks:
       - backend
 
@@ -34,9 +69,15 @@ services:
       - frontend
     environment:
       - NGINX_SERVER_NAME=soroushfathi.com
-      - BACKEND_HOST=backend
+      - MAIN_HOST=main
+      - SURVEY_HOST=survey
+      - AUTH_HOST=auth
+      - CORE_HOST=core
       - FRONTEND_HOST=frontend
-      - BACKEND_PORT=3001
+      - MAIN_PORT=3003
+      - CORE_PORT=3004
+      - AUTH_PORT=3002
+      - SURVEY_PORT=3001
       - FRONTEND_PORT=3000
       - NGINX_MAX_BODY=500M
     ports:
