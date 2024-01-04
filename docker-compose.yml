@@ -53,7 +53,7 @@ services:
     container_name: frontend
     restart: always
     depends_on:
-      - backend
+      - main
     ports:
       - 3000:3000
     networks:
@@ -65,7 +65,7 @@ services:
     container_name: nest-nginx
     restart: always
     depends_on:
-      - backend
+      - main
       - frontend
     environment:
       - NGINX_SERVER_NAME=soroushfathi.com
